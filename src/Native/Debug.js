@@ -22,9 +22,19 @@ function crash(message)
 	throw new Error(message);
 }
 
+function logTime(name, fn, arg)
+{
+	console.time(name);
+	var returnValue = fn(arg);
+	console.timeEnd(name);
+
+	return returnValue;
+}
+
 return {
 	crash: crash,
 	log: F2(log)
+	logTime: F3(logTime),
 };
 
 }();

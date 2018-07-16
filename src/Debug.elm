@@ -1,13 +1,14 @@
 module Debug exposing
   ( log
   , crash
+  , logTime
   )
 
 {-| This library is for investigating bugs or performance problems. It should
 *not* be used in production code.
 
 # Debugging
-@docs log, crash
+@docs log, crash, logTime
 -}
 
 import Native.Debug
@@ -59,4 +60,22 @@ Use the [`Maybe`](Maybe) or [`Result`](Result) libraries instead.
 crash : String -> a
 crash =
   Native.Debug.crash
+
+
+{-| Benchmark evaluation time of a function.
+
+
+This will "wrap" `fn` in a timer and log the eval time in the console.
+
+    logTime "name in console" fn arg
+
+If a function uses multiple args, just put parentheses around all but the last arg.
+
+    logTime "render header" (render arg1 arg2) arg3
+
+On Chrome, this will also be printed in the profiler timeline.
+-}
+logTime : String -> (a -> b) -> a -> b
+logTime =
+    Native.Debug.logTime
 
