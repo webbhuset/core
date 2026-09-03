@@ -12,6 +12,7 @@ module Basics exposing
   , toPolar, fromPolar
   , isNaN, isInfinite
   , identity, always, (<|), (|>), (<<), (>>), Never, never
+  , widen
   )
 
 {-| Tons of useful functions that get imported by default.
@@ -911,6 +912,28 @@ apL f x =
 -}
 identity : a -> a
 identity x =
+  x
+
+
+{-| Use a structural variant at a wider variant type. A value tagged
+`Loading` is already a valid member of every union that contains `Loading`,
+but the type checker only equates rows, so a value stored at
+`[ Loading, Success Int ]` cannot flow into a function that also handles
+`Failure` without help:
+
+    report : [ Loading, Success Int, Failure String ] -> String
+
+    view model =
+        report (widen model.status)
+
+The compiler checks that every tag of the argument's row appears in the
+target row with the same payload, and that the two rows agree on their
+remainder. At runtime `widen` is the identity function and compiles to
+nothing. Used as a plain value rather than applied directly (for example
+`List.map widen`) it is just `identity`.
+-}
+widen : a -> a
+widen x =
   x
 
 
