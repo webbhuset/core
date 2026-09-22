@@ -65,7 +65,7 @@ function _Platform_initialize(flagDecoder, args, init, update, subscriptions, st
 
 	function drain()
 	{
-		if (!stepper) { start(); }
+		if (!stepper) { start(); } else { started = true; }
 		if (!started) { return; }
 
 		var work = queue;
